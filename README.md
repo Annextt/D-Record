@@ -75,7 +75,7 @@ Além disso, o projeto também serve como base para evoluções futuras e como i
 
 🔍 Descoberta de vídeos por jogos, categorias ou tags
 
-# 📌 Todas as funcionalidades listadas acima fazem parte de planos futuros e não estão disponíveis na versão atual do projeto.
+# 📌OBS: Todas as funcionalidades listadas acima fazem parte de planos futuros e não estão disponíveis na versão atual do projeto.
 
 # 🛠️ Como Utilizar
 
