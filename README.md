@@ -9,7 +9,7 @@ O projeto foi criado para quem precisa capturar a tela sem depender de softwares
 Permite gravar a tela do computador de forma simples e direta.
 
 ⏪ Instant Replay
-Grave os últimos segundos automaticamente, ideal para capturar momentos inesperados em jogos ou aplicações.
+Grave os últimos minutos automaticamente, ideal para capturar momentos inesperados em jogos ou aplicações.
 
 ⌨️ Atalhos de teclado configuráveis
 Defina teclas personalizadas para gravação normal e replay.
