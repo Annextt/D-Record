@@ -51,7 +51,7 @@ Além disso, o projeto também serve como base para evoluções futuras e como i
 
 📤 Exportação e compartilhamento facilitado de vídeos
 
-🌱 Ideias planejadas para o futuro (ainda não implementadas)
+# 🌱 Ideias planejadas para o futuro (ainda não implementadas)
 
 🌐 Desenvolvimento de uma plataforma social própria, integrada ao projeto
 
