@@ -1,4 +1,4 @@
-# 🎥 Electron Screen Recorder
+# 🎥 D-Recorder
 
 Electron Screen Recorder é um gravador de tela desktop simples, rápido e funcional, desenvolvido em Electron, com foco em gravação local e Instant Replay.
 O projeto foi criado para quem precisa capturar a tela sem depender de softwares pesados ou serviços online.
