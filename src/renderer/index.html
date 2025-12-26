@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravador de Tela</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings-styles.css">
+</head>
+<body>
+    <!-- TELA PRINCIPAL DO GRAVADOR -->
+    <div class="container">
+        <h1>🎥 Gravador de Tela</h1>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="normal">Gravação Normal</button>
+            <button class="mode-btn" data-mode="replay">Instant Replay</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 15px; padding: 12px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; font-size: 13px; color: #856404;">
+            <strong>⚠️ Dica para Jogos:</strong><br>
+            Use <strong>Janela Sem Borda</strong> ao invés de Tela Cheia Exclusiva para melhor captura de 60 FPS
+        </div>
+
+        <div class="replay-settings" id="replaySettings" style="display: none;">
+            <label>Capturar últimos:</label>
+            <div class="time-options">
+                <button class="time-btn active" data-time="1">1 min</button>
+                <button class="time-btn" data-time="2">2 min</button>
+                <button class="time-btn" data-time="3">3 min</button>
+                <button class="time-btn" data-time="4">4 min</button>
+                <button class="time-btn" data-time="5">5 min</button>
+            </div>
+        </div>
+        
+        <div class="status idle" id="status">Pronto para gravar</div>
+        
+        <div class="recording-indicator" id="recordingIndicator">
+            <div class="red-dot"></div>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+
+        <div class="video-preview" id="videoPreview">
+            <video id="video" autoplay></video>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">Iniciar Gravação</button>
+            <button id="stopBtn" disabled>Parar Gravação</button>
+            <button id="captureBtn" style="display: none;">💾 Salvar Replay</button>
+        </div>
+    </div>
+    
+    <!-- BOTÃO DA ENGRENAGEM (CANTO SUPERIOR DIREITO) -->
+    <button id="btn-config" class="gear-btn">⚙️</button>
+
+    <!-- PAINEL DE CONFIGURAÇÕES (OVERLAY) -->
+    <section id="settingsPanel" class="settings-panel hidden">
+
+        <!-- HEADER COM BOTÃO X -->
+        <header class="settings-header">
+            <div class="left-side">
+                <span class="icon">⚙️</span>
+                <h1>Configurações</h1>
+            </div>
+            <button class="close-btn">✕</button>
+        </header>
+
+        <!-- TABS DE NAVEGAÇÃO -->
+        <nav class="settings-tabs">
+            <button class="tab active" data-tab="shortcuts">⌨️ Atalhos de Teclado</button>
+            <button class="tab" data-tab="folder">📁 Pasta de Salvamento</button>
+            <button class="tab" data-tab="tutorial">📖 Tutorial </button>
+            <button class="tab" data-tab="credits">👤 Créditos</button>
+        </nav>
+
+        <!-- CONTEÚDO DAS TABS -->
+        <div class="settings-content">
+
+            <!-- ===== TAB: ATALHOS ===== -->
+            <div class="tab-content active" id="shortcuts">
+                <h2>⌨️ Teclas de Atalho</h2>
+                
+                <!-- Gravação Normal -->
+                <div class="shortcut-group">
+                    <label>🎥 Gravação Normal</label>
+                    <div class="shortcut-display">
+                        <div class="shortcut-value" id="normalValue">F9</div>
+                        <button class="bind-btn" id="bindNormal">🔗 Vincular Tecla</button>
+                    </div>
+                </div>
+
+                <!-- Instant Replay -->
+                <div class="shortcut-group">
+                    <label>⚡ Instant Replay</label>
+                    <div class="shortcut-display">
+                        <div class="shortcut-value" id="replayValue">F10</div>
+                        <button class="bind-btn" id="bindReplay">🔗 Vincular Tecla</button>
+                    </div>
+                </div>
+
+                <!-- Aviso de conflito -->
+                <div id="shortcutWarning" class="warning hidden">
+                    ⚠️ As teclas devem ser diferentes! Escolha outra tecla.
+                </div>
+
+                <!-- Dica -->
+                <div class="tip">
+                    💡 <strong>Como usar:</strong> Clique em "Vincular Tecla" e pressione a tecla desejada no seu teclado ou botão do mouse. O sistema captura automaticamente F1-F12, letras, números e botões do mouse (1-5).
+                </div>
+            </div>
+
+            <!-- ===== TAB: PASTA ===== -->
+            <div class="tab-content" id="folder">
+                <h2>📁 Pasta de Salvamento</h2>
+                
+                <div class="folder-section">
+                    <label>Local onde as gravações serão salvas:</label>
+                    <div class="folder-display">
+                        <input type="text" id="savePath" readonly />
+                        <button id="selectFolder">📂 Selecionar Pasta</button>
+                    </div>
+
+                    <div class="folder-info">
+                        <h3 style="color: white; margin-top: 0; margin-bottom: 12px;">ℹ️ Informações</h3>
+                        <p>As gravações são salvas automaticamente após parar</p>
+                        <p>Formato: MP4 com codec H.264</p>
+                        <p>Qualidade: 60 FPS (frames por segundo)</p>
+                        <p>Nome do arquivo: gravacao_AAAA-MM-DD_HH-MM-SS.mp4</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB: TUTORIAL ===== -->
+            <div class="tab-content" id="tutorial">
+                <h2>📖 Tutorial Completo</h2>
+                
+                <div class="tutorial-section">
+                    <!-- Teclas Padrão -->
+                    <div class="tutorial-card keys">
+                        <h3>⌨️ Teclas Padrão</h3>
+                        <p>Atalhos configurados inicialmente no gravador:</p>
+                        <div class="keys-grid">
+                            <div class="key-display">
+                                <div class="key-label">Gravação Normal</div>
+                                <div class="key-value">F9</div>
+                            </div>
+                            <div class="key-display">
+                                <div class="key-label">Instant Replay</div>
+                                <div class="key-value">F10</div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 12px; font-size: 14px; opacity: 0.9;">
+                            💡 Você pode alterar essas teclas na aba "Atalhos de Teclado"
+                        </p>
+                    </div>
+
+                    <!-- Qualidade -->
+                    <div class="tutorial-card quality">
+                        <h3>🎬 Qualidade de Captura</h3>
+                        <p style="margin-bottom: 12px;">O gravador utiliza configurações profissionais:</p>
+                        <p><strong>✓ 60 FPS</strong> - Gravação fluida e profissional</p>
+                        <p><strong>✓ Codec H.264</strong> - Ótima qualidade com tamanho otimizado</p>
+                        <p><strong>✓ Bitrate adaptativo</strong> - Ajusta conforme a cena</p>
+                        <p><strong>✓ Resolução nativa</strong> - Mantém a resolução original da tela</p>
+                    </div>
+
+                    <!-- Dica para Jogos -->
+                    <div class="tutorial-card gaming">
+                        <h3>🎮 Dica Especial para Jogos FPS</h3>
+                        <p style="font-size: 16px; margin-bottom: 16px;">
+                            <strong>⚠️ Use "Janela Sem Borda" ao invés de "Tela Cheia Exclusiva"</strong>
+                        </p>
+                        
+                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                            <p style="font-weight: bold; margin-bottom: 8px;">Por quê?</p>
+                            <p>• Melhor captura de 60 FPS sem drops de frames</p>
+                            <p>• Menos impacto no desempenho do jogo</p>
+                            <p>• Facilita alternância entre janelas</p>
+                            <p>• Evita problemas de tela preta na gravação</p>
+                            <p>• Maior compatibilidade com overlays</p>
+                        </div>
+                        
+                        <p style="font-size: 14px; opacity: 0.9;">
+                            💡 <strong>Como ativar:</strong> Na maioria dos jogos, vá em <em>Configurações → Vídeo → Modo de Tela</em> e selecione "Janela Sem Borda" ou "Borderless Window"
+                        </p>
+                    </div>
+
+                    <!-- Como usar Instant Replay -->
+                    <div style="background: #1f2937; padding: 24px; border-radius: 12px; border: 2px solid #374151; color: white;">
+                        <h3 style="font-size: 20px; margin-bottom: 16px;">⚡ Como usar o Instant Replay</h3>
+                        <ol style="padding-left: 20px; line-height: 1.8;">
+                            <li>Ative o modo <strong>"Instant Replay"</strong> na tela principal</li>
+                            <li>Escolha quanto tempo quer capturar (1 a 5 minutos)</li>
+                            <li>O gravador mantém um buffer constante em segundo plano</li>
+                            <li>Quando acontecer algo épico, pressione <strong style="color: #ec4899;">F10</strong></li>
+                            <li>Os últimos X minutos serão salvos automaticamente! 🎉</li>
+                        </ol>
+                        <p style="margin-top: 16px; padding: 12px; background: rgba(59, 130, 246, 0.2); border-radius: 8px; border: 2px solid #3b82f6;">
+                            💡 <strong>Dica:</strong> O Instant Replay é ideal para capturar momentos inesperados sem precisar gravar o jogo inteiro!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB: CRÉDITOS ===== -->
+            <div class="tab-content" id="credits">
+                <div class="credits-section">
+                    <div class="credits-hero">
+                        <div class="credits-avatar">🎥</div>
+                        <h3> Screen Recorder</h3>
+                        <p>Desenvolvido por DevDavid</p>
+                        
+                        <div class="social-links">
+                            <a href="https://github.com/Annextt/Annextt" target="_blank" class="social-link">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                GitHub
+                            </a>
+                            
+                            <a href="https://www.instagram.com/woo_d4vid/?igsh=bGUxeHc5bDJ0ZHk3" target="_blank" class="social-link" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                                Instagram
+                            </a>
+                            
+                            <a href="https://www.linkedin.com/in/david-nakahara-8a5132320/" target="_blank" class="social-link" style="background: #0077b5;">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                                LinkedIn
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h3>🛠️ Tecnologias Utilizadas</h3>
+                        <div class="tech-grid">
+                            <div class="tech-item">Electron</div>
+                            <div class="tech-item">JavaScript</div>
+                            <div class="tech-item">HTML5 Canvas</div>
+                            <div class="tech-item">MediaRecorder API</div>
+                            <div class="tech-item">Node.js</div>
+                            <div class="tech-item">CSS3</div>
+                        </div>
+                    </div>
+
+                    <div class="version-info">
+                        <p><strong>Versão:</strong> 1.0.0</p>
+                        <p>© 2025 - Todos os direitos reservados</p>
+                        <p style="margin-top: 12px;">
+                            Feito com ❤️ para capturar seus melhores momentos
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SCRIPTS -->
+     
+    <script src="js/ui.js"></script>
+    <script src="js/gear.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/replay.js"></script>
+</body>
+</html>

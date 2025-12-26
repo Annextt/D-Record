@@ -1,0 +1,880 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', 'Consolas', monospace;
+    background: #0a0a0a;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(139, 0, 139, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 0, 128, 0.08) 0%, transparent 50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(10, 10, 15, 0.95);
+    border-radius: 4px;
+    padding: 48px;
+    box-shadow: 
+        0 0 2px rgba(255, 0, 255, 0.4),
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 40px rgba(139, 0, 139, 0.05);
+    max-width: 640px;
+    width: 100%;
+    border: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #ff00ff;
+    margin-bottom: 32px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-shadow: 
+        0 0 10px rgba(255, 0, 255, 0.7),
+        0 0 20px rgba(255, 0, 255, 0.4);
+}
+
+/* ========== SELETOR DE MODO ========== */
+.mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+.mode-btn {
+    padding: 14px 20px;
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 2px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.mode-btn:hover {
+    color: #ff00ff;
+    background: rgba(255, 0, 255, 0.1);
+    border-color: #ff00ff;
+    box-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
+}
+
+.mode-btn.active {
+    background: rgba(255, 0, 255, 0.2);
+    color: #fff;
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.8);
+}
+
+/* ========== CONFIGURAÇÕES DE REPLAY ========== */
+.replay-settings {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 24px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.03);
+}
+
+.replay-settings label {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: 700;
+    color: #00ffff;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+}
+
+.time-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.time-btn {
+    padding: 12px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+}
+
+.time-btn:hover {
+    border-color: #00ffff;
+    color: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+}
+
+.time-btn.active {
+    background: rgba(0, 255, 255, 0.2);
+    color: #fff;
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+}
+
+/* ========== STATUS ========== */
+.status {
+    text-align: center;
+    padding: 14px 20px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+}
+
+.status.recording {
+    background: rgba(255, 0, 128, 0.15);
+    color: #ff0080;
+    border-color: rgba(255, 0, 128, 0.5);
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
+    text-shadow: 0 0 8px rgba(255, 0, 128, 0.6);
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.status.idle {
+    background: rgba(139, 0, 139, 0.15);
+    color: #8b008b;
+    border-color: rgba(139, 0, 139, 0.5);
+    box-shadow: 0 0 12px rgba(139, 0, 139, 0.2);
+    text-shadow: 0 0 6px rgba(139, 0, 139, 0.6);
+}
+
+/* ========== INDICADOR DE GRAVAÇÃO ========== */
+.recording-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 0, 128, 0.1);
+    border-radius: 2px;
+    border: 1px solid rgba(255, 0, 128, 0.5);
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.2);
+}
+
+.recording-indicator.active {
+    display: flex;
+}
+
+.red-dot {
+    width: 14px;
+    height: 14px;
+    background: #ff0080;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.8);
+    animation: simpleBlink 1s ease-in-out infinite;
+}
+
+@keyframes simpleBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+.timer {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ff0080;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(255, 0, 128, 0.8);
+}
+
+/* ========== PREVIEW DE VÍDEO ========== */
+.video-preview {
+    width: 100%;
+    height: 320px;
+    background: #000;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 14px;
+    font-weight: 700;
+    overflow: hidden;
+    border: 2px solid rgba(255, 0, 255, 0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.15);
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ========== CONTROLES ========== */
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.controls.replay-mode {
+    grid-template-columns: 1fr;
+}
+
+button {
+    padding: 16px 24px;
+    border: 2px solid;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* ========== BOTÃO INICIAR ========== */
+#startBtn {
+    background: rgba(255, 0, 255, 0.1);
+    color: #ff00ff;
+    border-color: #ff00ff;
+    font-size: 16px;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+#startBtn:hover {
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+    text-shadow: 0 0 12px rgba(255, 0, 255, 0.9);
+}
+
+#startBtn:disabled {
+    background: rgba(40, 40, 40, 0.5);
+    color: #333;
+    border-color: #333;
+    cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
+    transform: none;
+}
+
+/* ========== BOTÃO PARAR ========== */
+#stopBtn {
+    background: rgba(255, 0, 128, 0.1);
+    color: #ff0080;
+    border-color: #ff0080;
+    text-shadow: 0 0 8px rgba(255, 0, 128, 0.6);
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
+}
+
+#stopBtn:hover {
+    box-shadow: 0 0 25px rgba(255, 0, 128, 0.5);
+    text-shadow: 0 0 12px rgba(255, 0, 128, 0.9);
+}
+
+#stopBtn:disabled {
+    background: rgba(40, 40, 40, 0.5);
+    color: #333;
+    border-color: #333;
+    cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
+    transform: none;
+}
+
+/* ========== BOTÃO CAPTURAR REPLAY ========== */
+#captureBtn {
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    border-color: #00ffff;
+    font-size: 16px;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+#captureBtn:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 12px rgba(0, 255, 255, 0.9);
+}
+
+#captureBtn:disabled {
+    background: rgba(40, 40, 40, 0.5);
+    color: #333;
+    border-color: #333;
+    cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
+    transform: none;
+}
+
+/* ========== RESPONSIVIDADE ========== */
+/* ===================================================
+   BOTÃO DA ENGRENAGEM (CANTO SUPERIOR DIREITO)
+=================================================== */
+.gear-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(147, 51, 234, 0.9);
+  border: 2px solid rgba(236, 72, 153, 0.8);
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.5);
+}
+
+.gear-btn:hover {
+  background: rgba(236, 72, 153, 0.9);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.7);
+}
+
+.gear-btn.hidden {
+  display: none;
+}
+
+/* ===================================================
+   PAINEL DE CONFIGURAÇÕES (OVERLAY)
+=================================================== */
+.settings-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.98);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+}
+
+.settings-panel.hidden {
+  display: none;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================================
+   HEADER COM BOTÃO DE FECHAR (X)
+=================================================== */
+.settings-header {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(147, 51, 234, 0.3);
+}
+
+.settings-header .left-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-header .icon {
+  font-size: 32px;
+}
+
+.settings-header h1 {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* ===================================================
+   TABS (NAVEGAÇÃO)
+=================================================== */
+.settings-tabs {
+  display: flex;
+  background: #1f2937;
+  border-bottom: 2px solid #374151;
+}
+
+.tab {
+  flex: 1;
+  padding: 16px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+  background: #374151;
+  color: white;
+}
+
+.tab.active {
+  background: #374151;
+  color: white;
+  border-bottom-color: #ec4899;
+}
+
+/* ===================================================
+   CONTEÚDO DAS TABS
+=================================================== */
+.settings-content {
+  padding: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tab-content h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+
+.tab-content label {
+  display: block;
+  color: white;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+/* ===================================================
+   INPUTS DE ATALHOS (COM BOTÃO DE VINCULAR)
+=================================================== */
+.shortcut-group {
+  background: #1f2937;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 2px solid #374151;
+}
+
+.shortcut-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.shortcut-value {
+  flex: 1;
+  background: #111827;
+  color: #fbbf24;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #374151;
+}
+
+.bind-btn {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border: none;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.bind-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.4);
+}
+
+.bind-btn.listening {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ===================================================
+   AVISOS E DICAS
+=================================================== */
+.warning {
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid #ef4444;
+  color: #fca5a5;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+.warning.hidden {
+  display: none;
+}
+
+.tip {
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid #3b82f6;
+  color: #93c5fd;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* ===================================================
+   BOTÕES GERAIS
+=================================================== */
+.settings-content button:not(.bind-btn):not(.close-btn) {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+}
+
+.settings-content button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.4);
+}
+
+/* ===================================================
+   INPUTS DE TEXTO
+=================================================== */
+.settings-content input[type="text"] {
+  width: 100%;
+  background: #1f2937;
+  border: 2px solid #374151;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.settings-content input[readonly] {
+  background: #111827;
+  color: #9ca3af;
+}
+
+/* ===================================================
+   SEÇÃO DE PASTA
+=================================================== */
+.folder-section {
+  background: #1f2937;
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid #374151;
+}
+
+.folder-display {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.folder-display input {
+  flex: 1;
+  margin: 0;
+}
+
+.folder-display button {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.folder-info {
+  margin-top: 20px;
+  background: #111827;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.folder-info p {
+  color: #9ca3af;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-info p::before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* ===================================================
+   SEÇÃO DE TUTORIAL
+=================================================== */
+.tutorial-section {
+  display: grid;
+  gap: 20px;
+}
+
+.tutorial-card {
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+  padding: 24px;
+  border-radius: 12px;
+  color: white;
+}
+
+.tutorial-card h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tutorial-card.keys {
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+}
+
+.tutorial-card.quality {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.tutorial-card.gaming {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.keys-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.key-display {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.key-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.key-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* ===================================================
+   SEÇÃO DE CRÉDITOS
+=================================================== */
+.credits-section {
+  text-align: center;
+}
+
+.credits-hero {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  padding: 48px;
+  border-radius: 16px;
+  color: white;
+  margin-bottom: 24px;
+}
+
+.credits-avatar {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.credits-hero h3 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.credits-hero p {
+  opacity: 0.9;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-link:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.tech-stack {
+  background: #1f2937;
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid #374151;
+}
+
+.tech-stack h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.tech-item {
+  background: #111827;
+  padding: 12px;
+  border-radius: 8px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tech-item::before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
+.version-info {
+  margin-top: 24px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.version-info p {
+  margin: 4px 0;
+}

@@ -1,0 +1,19 @@
+# Dependências
+node_modules/
+
+# Builds
+dist/
+win-unpacked/
+out/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Cache do electron-builder
+*.blockmap
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
